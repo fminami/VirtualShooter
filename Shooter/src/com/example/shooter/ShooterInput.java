@@ -1,0 +1,8 @@
+package com.example.shooter;
+
+public interface ShooterInput {
+
+	void getOrientation(float[] value, int offset);
+	
+	boolean detectedShootAction(float[] value, int offset);
+}
