@@ -11,11 +11,14 @@ import com.example.shooter.util.Vector3;
 public class ShooterInputManager extends InputManager implements ShooterInput{
 	
 	private static final int ORIENTATION;
+	private static final int CENTER;
 	private static final int GYROSCOPE;
 	private static final int TOTAL;
 	static{
 		int offset = 0;
 		ORIENTATION = offset;
+		offset += Vector3.SIZE;
+		CENTER = offset;
 		offset += Vector3.SIZE;
 		GYROSCOPE = offset;
 		offset += Vector3.SIZE;
@@ -40,9 +43,29 @@ public class ShooterInputManager extends InputManager implements ShooterInput{
 	
 	@Override
 	public void getOrientation(float[] value, int offset) {
+		value[offset + 0] = buffer[ORIENTATION + 0] - buffer[CENTER + 0];
+		value[offset + 1] = buffer[ORIENTATION + 1] - buffer[CENTER + 1];
+		value[offset + 2] = buffer[ORIENTATION + 2] - buffer[CENTER + 2];
+	}
+	
+	@Override
+	public void getRawOrientation(float[] value, int offset) {
 		value[offset + 0] = buffer[ORIENTATION + 0];
 		value[offset + 1] = buffer[ORIENTATION + 1];
 		value[offset + 2] = buffer[ORIENTATION + 2];
+	}
+	
+	public void getCenter(float[] value, int offset){
+		value[offset + 0] = buffer[CENTER + 0];
+		value[offset + 1] = buffer[CENTER + 1];
+		value[offset + 2] = buffer[CENTER + 2];
+	}
+	
+	@Override
+	public void setCenter(float[] value, int offset) {
+		buffer[CENTER + 0] = value[offset + 0];
+		buffer[CENTER + 1] = value[offset + 1];
+		buffer[CENTER + 2] = value[offset + 2];
 	}
 	
 	public void getGyroscope(float[] value, int offset) {
@@ -56,6 +79,7 @@ public class ShooterInputManager extends InputManager implements ShooterInput{
 		for(int i = 0, count = actions.getActionCount(); i < count; i++){
 			if(actions.getAction(i) == Action.SHOOT){
 				actions.getSnapshotOrientation(value, offset, i);
+				Vector3.sub(value, offset, value, offset, buffer, CENTER);
 				return true;
 			}
 		}

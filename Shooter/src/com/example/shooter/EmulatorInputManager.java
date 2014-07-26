@@ -11,6 +11,7 @@ public class EmulatorInputManager extends InputManager implements ShooterInput, 
 	private static final float ANGLE = (float)(Math.PI / 180.0);
 	
 	private final float[] orientation = new float[3];
+	private final float[] center = new float[3];
 	
 	private boolean shoot;
 	private volatile boolean nextShoot;
@@ -22,10 +23,26 @@ public class EmulatorInputManager extends InputManager implements ShooterInput, 
 	@Override
 	public void getOrientation(float[] value, int offset) {
 		synchronized (orientation) {
+			value[offset + 0] = orientation[0] - center[0];
+			value[offset + 1] = orientation[1] - center[1];
+			value[offset + 2] = orientation[2] - center[2];
+		}
+	}
+	
+	@Override
+	public void getRawOrientation(float[] value, int offset) {
+		synchronized (orientation) {
 			value[offset + 0] = orientation[0];
 			value[offset + 1] = orientation[1];
 			value[offset + 2] = orientation[2];
 		}
+	}
+	
+	@Override
+	public void setCenter(float[] value, int offset) {
+		center[0] = value[offset + 0];
+		center[1] = value[offset + 1];
+		center[2] = value[offset + 2];
 	}
 	
 	@Override

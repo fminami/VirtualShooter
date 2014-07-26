@@ -11,6 +11,8 @@ public class ShooterGame extends Game {
 
 	private final FloatArray array = new FloatArray().freeze();
 	
+	private boolean centered;
+	
 	public ShooterGame(InputManager input, ResourceManager resources){
 		super(input , resources);
 		
@@ -31,6 +33,13 @@ public class ShooterGame extends Game {
 		}
 
 		super.onScreenChanged(width, height);
+	}
+	
+	@Override
+	protected void onPause() {
+		centered = false;
+		
+		super.onPause();
 	}
 
 	@Override
@@ -61,7 +70,16 @@ public class ShooterGame extends Game {
 
 	@Override
 	protected void onUpdate() {
-		
+		if(!centered){
+			ShooterInput input = (ShooterInput)getService(InputManager.class);
+			
+			float[] buffer = array.getBuffer();
+			int offset = array.t(0);
+			input.getRawOrientation(buffer, offset);
+			input.setCenter(buffer, offset);
+			
+			centered = true;
+		}
 	}
 
 	@Override

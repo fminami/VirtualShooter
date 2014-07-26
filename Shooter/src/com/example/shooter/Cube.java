@@ -182,7 +182,7 @@ public class Cube extends Model {
 			float dot_cv = Vector3Ex.dot(fa, fa.t(0), fa.t(1));
 			float sqc = Vector3Ex.lengthSquared(fa, fa.t(0));
 			float sqv = Vector3Ex.lengthSquared(fa, fa.t(1));
-			float r = Vector3Ex.max(fa, fa.t(2)) * (float)(Math.sqrt(3.0) * 0.5) * 2.0f;
+			float r = Vector3Ex.max(fa, fa.t(2)) * (float)(Math.sqrt(3.0) * 0.5);
 			float d = dot_cv * dot_cv - sqv * (sqc - r * r);
 			if(d > 0){
 				color = (color + 3) % 12;
